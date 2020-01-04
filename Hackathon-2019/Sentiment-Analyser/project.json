@@ -3,6 +3,7 @@
   "description": "It reads the sentiments of the mail body and decided the priority of the issue customer is facing, accordingly creates a Ticket in Ticket management portal. It also sets the priority of the ticket accroding to the severity analysed from the mail body.",
   "main": "Main.xaml",
   "dependencies": {
+    "UiPath.Cognitive.Activities": "[2.2.4]",
     "UiPath.Credentials.Activities": "[1.1.6479.13204]",
     "UiPath.Excel.Activities": "[2.7.2]",
     "UiPath.Mail.Activities": "[1.7.2]",

@@ -3,11 +3,12 @@
     <x:Property Name="out_MailMessage" Type="OutArgument(scg:List(snm:MailMessage))" />
     <x:Property Name="in_MailFolder" Type="InArgument(x:String)" />
     <x:Property Name="in_StrMailSubject" Type="InArgument(x:String)" />
+    <x:Property Name="in_CustomerticketUrl" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>901,1071</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>901,1198</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ReadEmail_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="46">
@@ -58,9 +59,10 @@
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ValueTuple</AssemblyReference>
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Reads email with &quot;Vendor master creation&quot; in the subject.&#xA;&#xA;Input : NA&#xA;Output : Collection of Email." DisplayName="ReadEmail" sap:VirtualizedContainerService.HintSize="881,1011" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Reads email with &quot;Vendor master creation&quot; in the subject.&#xA;&#xA;Input : NA&#xA;Output : Collection of Email." DisplayName="ReadEmail" sap:VirtualizedContainerService.HintSize="881,1138" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(snm:MailMessage)" Name="mailCollection" />
       <Variable x:TypeArguments="snm:MailMessage" Name="mail" />
@@ -73,8 +75,8 @@
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
     <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="839,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Started reading emails from &quot;+in_MailFolder]" />
-    <ui:GetOutlookMailMessages Account="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Get Outlook Mail Messages" Filter="[&quot;@SQL=(urn:schemas:httpmail:subject LIKE '%&quot;+in_StrMailSubject.ToLower+&quot;%')&quot;]" GetAttachements="False" sap:VirtualizedContainerService.HintSize="839,22" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="[in_MailFolder]" MarkAsRead="False" Messages="[mailCollection]" OnlyUnreadMessages="True" Top="30" />
-    <If Condition="[mailCollection.Count = 0]" sap:VirtualizedContainerService.HintSize="839,523" sap2010:WorkflowViewState.IdRef="If_2">
+    <ui:GetOutlookMailMessages Account="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Get Outlook Mail Messages" Filter="[&quot;@SQL=(urn:schemas:httpmail:subject LIKE '%&quot;+in_StrMailSubject.ToLower+&quot;%')&quot;]" GetAttachements="False" sap:VirtualizedContainerService.HintSize="839,22" sap2010:WorkflowViewState.IdRef="GetOutlookMailMessages_1" MailFolder="[in_MailFolder]" MarkAsRead="True" Messages="[mailCollection]" OnlyUnreadMessages="True" Top="30" />
+    <If Condition="[mailCollection.Count = 0]" sap:VirtualizedContainerService.HintSize="839,650" sap2010:WorkflowViewState.IdRef="If_2">
       <If.Then>
         <Sequence sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_3">
           <sap:WorkflowViewStateService.ViewState>
@@ -87,18 +89,23 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence sap:VirtualizedContainerService.HintSize="418,375" sap2010:WorkflowViewState.IdRef="Sequence_5">
+        <Sequence sap:VirtualizedContainerService.HintSize="418,502" sap2010:WorkflowViewState.IdRef="Sequence_5">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <Sequence sap:VirtualizedContainerService.HintSize="376,283" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence sap:VirtualizedContainerService.HintSize="376,410" sap2010:WorkflowViewState.IdRef="Sequence_4">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CustomerTicketOpen workflow" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="CustomerTicket\CustomerTicketOpen.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="in_CustomerTicketUrl">[in_CustomerticketUrl]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
             <Assign sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_5">
               <Assign.To>
                 <OutArgument x:TypeArguments="scg:List(snm:MailMessage)">[out_MailMessage]</OutArgument>
