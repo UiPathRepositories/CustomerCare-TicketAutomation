@@ -2,7 +2,7 @@
   <x:Members>
     <x:Property Name="in_RobotPath" Type="InArgument(x:String)" />
     <x:Property Name="in_MainPath" Type="InArgument(x:String)" />
-    <x:Property Name="out_FilePath" Type="InArgument(x:String)" />
+    <x:Property Name="out_FilePath" Type="OutArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -81,7 +81,7 @@
         <OutArgument x:TypeArguments="x:String">[StrCommand]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">["$commandtext = '""" + in_RobotPath.Trim + """ -file """ + in_MainPath.Trim + """'" + Environment.NewLine + "$commandtext &gt; """ + out_FilePath + """" + Environment.NewLine]</InArgument>
+        <InArgument x:TypeArguments="x:String">["$commandtext = '""" + in_RobotPath.Trim + """ -file """ + in_MainPath.Trim + """'" + Environment.NewLine + "$commandtext | Out-File -FilePath """ + out_FilePath + """" +" -Encoding ASCII" + Environment.NewLine]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="333.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[StrCommand]" />
